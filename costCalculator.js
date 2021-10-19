@@ -1,4 +1,3 @@
-
 const inputNameEl = document.getElementById("name")
 const inputPriceEl = document.getElementById("price")
 
@@ -9,9 +8,10 @@ const maxPriceEl = document.getElementById("maxPrice")
 const list = []
 
 class Purchase {
-    constructor(name, price) {
+    constructor(name, price, id) {
         this.name = name
         this.price = price
+        this.id = id
     }
 }
 
@@ -19,26 +19,54 @@ buttonCalculateEl.addEventListener('click', () => {
 
     const name = inputNameEl.value
     const price = inputPriceEl.value
-    const item = new Purchase(name, price)
+    const item = new Purchase(name, price, Math.random())
     list.push(item)
-    let result= '';
+
+    resultEl.innerHTML = ''
+
     for (let purchase of list) {
-        result = result +`<p>Название: ${purchase.name}, цена: ${purchase.price}</p>`
+
+        const el = document.createElement('div')
+        el.innerHTML = `
+    <p class="alert alert-primary" role="alert">Название: ${purchase.name}, цена: ${purchase.price}
+    <button id="${purchase.id}" type="button" class="btn btn-danger">
+    Удалить
+    </button>
+    </p>`
+        resultEl.appendChild(el)
+        // const deleteButtonEl = document.getElementById(purchase.id)
+        //
+        // deleteButtonEl.addEventListener('click', () => {
+        //     console.log(purchase)
+        //
+        //     let index = list.findIndex(el => el.id === purchase.id)
+        //     list.splice(0, index+1) //ПОЧЕМУ ТАК?
+        //     console.log(index)
+        // })
     }
 
-    resultEl.innerHTML = result
-
-let max = 0
+    let max = 0
     let maxItem = null;
-for (let itemPrice of list){
-    if(itemPrice.price > max){
-        max = itemPrice.price
-        maxItem = itemPrice
+    for (let itemPrice of list) {
+        if (Number(itemPrice.price) > max) { // ПОЧЕМУ НЕ РАБОТАЕТ БЕЗ NUMBER
+            max = itemPrice.price
+            maxItem = itemPrice
+        }
     }
-}
-let maxPrice = ''
+    let maxPrice = ''
     maxPrice += `<p>Максимальная цена: ${maxItem.price}</p>
     <p>Наименование: ${maxItem.name}</p>`
     maxPriceEl.innerHTML = maxPrice
 
 })
+
+const deleteButtonEl = document.getElementById(purchase.id)
+
+deleteButtonEl.addEventListener('click', () => {
+    console.log(purchase)
+
+    let index = list.findIndex(el => el.id === purchase.id)
+    list.splice(0, index+1) //ПОЧЕМУ ТАК?
+    console.log(index)
+})
+
