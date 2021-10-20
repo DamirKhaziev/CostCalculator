@@ -22,28 +22,7 @@ buttonCalculateEl.addEventListener('click', () => {
     const item = new Purchase(name, price, Math.random())
     list.push(item)
 
-    resultEl.innerHTML = ''
-
-    for (let purchase of list) {
-
-        const el = document.createElement('div')
-        el.innerHTML = `
-    <p class="alert alert-primary" role="alert">Название: ${purchase.name}, цена: ${purchase.price}
-    <button id="${purchase.id}" type="button" class="btn btn-danger">
-    Удалить
-    </button>
-    </p>`
-        resultEl.appendChild(el)
-        // const deleteButtonEl = document.getElementById(purchase.id)
-        //
-        // deleteButtonEl.addEventListener('click', () => {
-        //     console.log(purchase)
-        //
-        //     let index = list.findIndex(el => el.id === purchase.id)
-        //     list.splice(0, index+1) //ПОЧЕМУ ТАК?
-        //     console.log(index)
-        // })
-    }
+    renderList();
 
     let max = 0
     let maxItem = null;
@@ -60,13 +39,39 @@ buttonCalculateEl.addEventListener('click', () => {
 
 })
 
-const deleteButtonEl = document.getElementById(purchase.id)
+// const deleteButtonEl = document.getElementById(purchase.id)
+//
+// deleteButtonEl.addEventListener('click', () => {
+//     console.log(purchase)
+//
+//     let index = list.findIndex(el => el.id === purchase.id)
+//     list.splice(0, index+1) //ПОЧЕМУ ТАК?
+//     console.log(index)
+// })
+//
 
-deleteButtonEl.addEventListener('click', () => {
-    console.log(purchase)
+const renderList = () => {
+    resultEl.innerHTML = ''
 
-    let index = list.findIndex(el => el.id === purchase.id)
-    list.splice(0, index+1) //ПОЧЕМУ ТАК?
-    console.log(index)
-})
+    for (let purchase of list) {
 
+        const el = document.createElement('div')
+        el.innerHTML = `
+    <p class="alert alert-primary" role="alert">Название: ${purchase.name}, цена: ${purchase.price}
+    <button id="${purchase.id}" type="button" class="btn btn-danger">
+    Удалить
+    </button>
+    </p>`
+        resultEl.appendChild(el)
+        const deleteButtonEl = document.getElementById(purchase.id)
+
+        deleteButtonEl.addEventListener('click', () => {
+            console.log(purchase)
+
+            let index = list.findIndex(el => el.id === purchase.id)
+            list.splice(index, 1)
+
+            renderList();
+        })
+    }
+}
